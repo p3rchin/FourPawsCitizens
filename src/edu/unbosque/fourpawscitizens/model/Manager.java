@@ -98,4 +98,66 @@ public class Manager {
         }
 
     }
+
+    private String findByMicrochip (String pMicrochip){
+        String message = "";
+        try {
+            for (int i = 0; i < listOfPet.size(); i++) {
+
+                if (Long.parseLong(pMicrochip) == listOfPet.get(i).getMicrochip()) {
+                    message += "ID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
+                            + "Gender: " + listOfPet.get(i).getSex() + "\n" + "Size: " + listOfPet.get(i).getSize() + "\n" + "Potentially dangerous: " + listOfPet.get(i).getPotentDangerous() + "\n" + "Neighborhood: " + listOfPet.get(i).getNeighborhood() + "\n";
+                }
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error, not found microchip");
+        }
+        return message;
+    }
+
+    private String countBySpecies (String pSpecie){
+        String message = "";
+        int cont = 0;
+        for (int i = 0; i < listOfPet.size(); i++) {
+
+            if (pSpecie.equals(listOfPet.get(i).getSpecies())) {
+                cont++;
+            }
+        }
+        if (cont > 1) {
+            message += "The number of animals of the " + pSpecie + " species is: " + cont;
+        } else {
+            message += "The species was not found";
+        }
+        return message;
+    }
+
+    public String findBypotentDangerousInNeighborhood ( int n, String option, String neighborhood){
+        String message = "";
+        int count = 0;
+        if (option.equals("TOP")) {
+            for (int i = 0; i < listOfPet.size(); i++) {
+                if (listOfPet.get(i).getPotentDangerous() && listOfPet.get(i).getNeighborhood().equals(neighborhood)) {
+                    count++;
+                    if (count <= n) {
+                        message += "ID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
+                                + "Gender: " + listOfPet.get(i).getSex() + "\n" + "Size: " + listOfPet.get(i).getSize() + "\n" + "Potentially dangerous: " + listOfPet.get(i).getPotentDangerous() + "\n" + "Neighborhood: " + listOfPet.get(i).getNeighborhood() + "\n";
+                    }
+                }
+            }
+        } else if (option.equals("LAST")) {
+            for (int i = listOfPet.size() - 1; i >= 0; i--) {
+                if (listOfPet.get(i).getPotentDangerous() && listOfPet.get(i).getNeighborhood().equals(neighborhood)) {
+                    count++;
+                    if (count <= n) {
+                        message += "ID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
+                                + "Gender: " + listOfPet.get(i).getSex() + "\n" + "Size: " + listOfPet.get(i).getSize() + "\n" + "Potentially dangerous: " + listOfPet.get(i).getPotentDangerous() + "\n" + "Neighborhood: " + listOfPet.get(i).getNeighborhood() + "\n";
+                    }
+                }
+            }
+        }
+        return message;
+    }
 }
