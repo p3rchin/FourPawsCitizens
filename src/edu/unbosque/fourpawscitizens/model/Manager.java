@@ -6,15 +6,171 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Manager {
     private ArrayList<Pet> listOfPet;
+    Scanner read;
 
     public Manager() throws IOException {
-
+        read = new Scanner(System.in);
         listOfPet = new ArrayList<Pet>();
         this.uploadData();
         this.assignID();
+        this.run();
+    }
+
+    public void run() {
+        String option = "-----FourPawsCitizens-----\n" +
+                "1. Busqueda por microchip\n" +
+                "2. Conteo de animales por especie\n" +
+                "3. Busqueda de potencialmente peligroso por localidad\n" +
+                "4. Busqueda por diferentes campos";
+        System.out.println(option);
+        int op = read.nextInt();
+        String message = "";
+        switch (op) {
+            case 1:
+                System.out.println("por favor ingrese el microchip del animal");
+                long pMicrochip = read.nextLong();
+                String pMicro = String.valueOf(pMicrochip);
+                message = findByMicrochip(pMicro);
+                System.out.println(message);
+                System.out.println("quiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+                int exit = read.nextInt();
+                switch (exit) {
+                    case 1:
+                        run();
+                        break;
+                    case 2:
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                break;
+
+            case 2:
+                System.out.println("por favor ingrese la especie del animal");
+                String pSpecies = read.next();
+                message = countBySpecies(pSpecies);
+                System.out.println(message);
+                System.out.println("\nquiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+                int exit2 = read.nextInt();
+                switch (exit2) {
+                    case 1:
+                        run();
+                        break;
+                    case 2:
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                break;
+
+            case 3:
+                System.out.println("ingrese la cantidad de mascotas que quiere ver");
+                int n = read.nextInt();
+                System.out.println("escoja entre TOP o LAST");
+                String position = read.next();
+                System.out.println("escriba la localidad");
+                String pNeighborhood = read.next();
+                message = findBypotentDangerousInNeighborhood(n, position, pNeighborhood);
+                System.out.println(message);
+                System.out.println("\nquiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+                int exit3 = read.nextInt();
+                switch (exit3) {
+                    case 1:
+                        run();
+                        break;
+                    case 2:
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                break;
+
+            case 4:
+                System.out.println("escoja entre estas especies\n" + "1. CANINO\n" + "2. FELINO");
+                int s = read.nextInt();
+                String pSpecie = "";
+                switch (s) {
+                    case 1:
+                        pSpecie = "CANINO";
+                        break;
+                    case 2:
+                        pSpecie = "FELINO";
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                System.out.println("escoja el sexo \n" + "1. HEMBRA\n" + "2. MACHO");
+                int sex = read.nextInt();
+                String pSex = "";
+                switch (sex) {
+                    case 1:
+                        pSex = "HEMBRA";
+                        break;
+                    case 2:
+                        pSex = "MACHO";
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                System.out.println("escoja el tamaño \n" + "1. MINIATURA\n" + "2. PEQUEÑO\n" + "3. MEDIANO\n" + "4. GRANDE");
+                int size = read.nextInt();
+                String pSize = "";
+                switch (size) {
+                    case 1:
+                        pSize = "MINIATURA";
+                        break;
+                    case 2:
+                        pSize = "PEQUEÑO";
+                        break;
+                    case 3:
+                        pSize = "MEDIANO";
+                        break;
+                    case 4:
+                        pSize = "GRANDE";
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                System.out.println("el animal es peligroso? \n" + "1. NO\n" + "2. SI");
+                int danger = read.nextInt();
+                String pDanger = "";
+                switch (danger) {
+                    case 1:
+                        pDanger = "NO";
+                        break;
+                    case 2:
+                        pDanger = "SI";
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                message = findByMultipleFields(pSpecie, pSex, pSize, pDanger);
+                System.out.println(message);
+                System.out.println("\nquiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+                int exit4 = read.nextInt();
+                switch (exit4) {
+                    case 1:
+                        run();
+                        break;
+                    case 2:
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("LA OPCION NO ES CORRECTA");
+                }
+                break;
+
+            default:
+
+                break;
+        }
     }
 
     private void assignID() {
@@ -54,7 +210,7 @@ public class Manager {
 
         try {
 
-            br = new BufferedReader(new FileReader("C:\\Users\\fabic\\FourPawsCitizens\\src\\edu\\unbosque\\fourpawscitizens\\data\\pets-citizens.csv"));
+            br = new BufferedReader(new FileReader("src/edu/unbosque/fourpawscitizens/model/data/pets-citizens.csv"));
             String line = br.readLine();
 
             while (null != line) {
@@ -99,13 +255,13 @@ public class Manager {
 
     }
 
-    private String findByMicrochip (String pMicrochip){
+    private String findByMicrochip(String pMicrochip) {
         String message = "";
         try {
             for (int i = 0; i < listOfPet.size(); i++) {
 
                 if (Long.parseLong(pMicrochip) == listOfPet.get(i).getMicrochip()) {
-                    message += "ID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
+                    message += "\nID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
                             + "Gender: " + listOfPet.get(i).getSex() + "\n" + "Size: " + listOfPet.get(i).getSize() + "\n" + "Potentially dangerous: " + listOfPet.get(i).getPotentDangerous() + "\n" + "Neighborhood: " + listOfPet.get(i).getNeighborhood() + "\n";
                 }
 
@@ -117,7 +273,7 @@ public class Manager {
         return message;
     }
 
-    private String countBySpecies (String pSpecie){
+    private String countBySpecies(String pSpecie) {
         String message = "";
         int cont = 0;
         for (int i = 0; i < listOfPet.size(); i++) {
@@ -134,7 +290,7 @@ public class Manager {
         return message;
     }
 
-    public String findBypotentDangerousInNeighborhood ( int n, String option, String neighborhood){
+    public String findBypotentDangerousInNeighborhood(int n, String option, String neighborhood) {
         String message = "";
         int count = 0;
         if (option.equals("TOP")) {
@@ -161,7 +317,7 @@ public class Manager {
         return message;
     }
 
-    public String findByMultipleFields (String species, String sex, String size, String potentDangerous){
+    public String findByMultipleFields(String species, String sex, String size, String potentDangerous) {
         String message = "";
         String pSize = "";
         if (size.equals("MINIATURA")) {
