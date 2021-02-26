@@ -160,4 +160,32 @@ public class Manager {
         }
         return message;
     }
+
+    public String findByMultipleFields (String species, String sex, String size, String potentDangerous){
+        String message = "";
+        String pSize = "";
+        if (size.equals("MINIATURA")) {
+            pSize = size.substring(0, 2);
+        } else {
+            pSize = size.substring(0, 1);
+        }
+        String pSex = sex.substring(0, 1).toUpperCase();
+        String pSpecies = species.substring(0, 1).toUpperCase();
+        String pDangerous = "";
+        if (potentDangerous.equals("NO")) {
+            pDangerous = "F";
+        } else if (potentDangerous.equals("SI")) {
+            pDangerous = "T";
+        }
+        String aux = pSpecies + pSex + pSize + pDangerous;
+        for (int i = 0; i < listOfPet.size(); i++) {
+            String comparison = listOfPet.get(i).getId();
+            String[] code = comparison.split("-");
+            String res = code[1];
+            if (res.equals(aux)) {
+                message += this.listOfPet.get(i).getId() + "\n";
+            }
+        }
+        return message;
+    }
 }
