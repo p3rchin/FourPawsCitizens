@@ -1,16 +1,35 @@
+/**
+ * Is the package that contains the classes
+ */
+
 package edu.unbosque.fourpawscitizens.model;
 
 import edu.unbosque.fourpawscitizens.model.dtos.Pet;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+
 public class Manager {
+
+    /**
+     * listOfPet is the arrayList from class Pet.
+     */
+
     private ArrayList<Pet> listOfPet;
+
+    /**
+     * read is the Scanner.
+     */
     Scanner read;
+
+    /**
+     * Is the contructor of the class.
+     * @throws IOException is generated when the file has problems.
+     */
 
     public Manager() throws IOException {
         read = new Scanner(System.in);
@@ -20,23 +39,34 @@ public class Manager {
         this.run();
     }
 
+    /**
+     * Is the method that run the program.
+     */
     public void run() {
-        String option = "-----FourPawsCitizens-----\n" +
-                "1. Busqueda por microchip\n" +
+        String option = " ————————— FourPawsCitizens —————————\n" +
+                "1. Búsqueda por microchip\n" +
                 "2. Conteo de animales por especie\n" +
-                "3. Busqueda de potencialmente peligroso por localidad\n" +
-                "4. Busqueda por diferentes campos";
+                "3. Búsqueda de potencialmente peligroso por localidad\n" +
+                "4. Búsqueda por diferentes campos";
         System.out.println(option);
         int op = read.nextInt();
         String message = "";
         switch (op) {
             case 1:
-                System.out.println("por favor ingrese el microchip del animal");
-                long pMicrochip = read.nextLong();
-                String pMicro = String.valueOf(pMicrochip);
-                message = findByMicrochip(pMicro);
-                System.out.println(message);
-                System.out.println("quiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+
+                System.out.println("Por favor ingrese el microchip del animal");
+                try {
+                    long pMicrochip = read.nextLong();
+                    String pMicro = String.valueOf(pMicrochip);
+                    message = findByMicrochip(pMicro);
+                    System.out.println(message);
+                } catch (Exception e) {
+                    System.out.println("Carácteres no válidos");
+                    System.exit(0);
+                }
+
+
+                System.out.println("¿Quiere seguir en el programa?\n" + "1. Si\n" + "2. No");
                 int exit = read.nextInt();
                 switch (exit) {
                     case 1:
@@ -46,16 +76,28 @@ public class Manager {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
                 break;
 
             case 2:
-                System.out.println("por favor ingrese la especie del animal");
-                String pSpecies = read.next();
+                System.out.println("Escoja entre estas especies\n" + "1. CANINO\n" + "2. FELINO");
+                int s = read.nextInt();
+                String pSpecies = "";
+                switch (s) {
+                    case 1:
+                        pSpecies = "CANINO";
+                        break;
+                    case 2:
+                        pSpecies = "FELINO";
+                        break;
+                    default:
+                        System.out.println("La opción es incorrecta");
+                }
+
                 message = countBySpecies(pSpecies);
                 System.out.println(message);
-                System.out.println("\nquiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+                System.out.println("\n¿Quiere seguir en el programa?\n" + "1. Si\n" + "2. No");
                 int exit2 = read.nextInt();
                 switch (exit2) {
                     case 1:
@@ -65,20 +107,33 @@ public class Manager {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
                 break;
 
             case 3:
-                System.out.println("ingrese la cantidad de mascotas que quiere ver");
+
+                System.out.println("Ingrese la cantidad de mascotas que quiere ver");
                 int n = read.nextInt();
-                System.out.println("escoja entre TOP o LAST");
-                String position = read.next();
-                System.out.println("escriba la localidad");
+                System.out.println("Escoja:\n" + "1. TOP\n" + "2. LAST\n");
+                int pos = read.nextInt();
+                String position = "";
+                switch (pos) {
+                    case 1:
+                        position = "TOP";
+                        break;
+                    case 2:
+                        position = "LAST";
+                        break;
+                    default:
+                        System.out.println("La opción es incorrecta");
+
+                }
+                System.out.println("Escriba la localidad");
                 String pNeighborhood = read.next();
                 message = findBypotentDangerousInNeighborhood(n, position, pNeighborhood);
                 System.out.println(message);
-                System.out.println("\nquiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+                System.out.println("\n¿Quiere seguir en el programa?\n" + "1. Si\n" + "2. No");
                 int exit3 = read.nextInt();
                 switch (exit3) {
                     case 1:
@@ -88,15 +143,16 @@ public class Manager {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
                 break;
 
             case 4:
-                System.out.println("escoja entre estas especies\n" + "1. CANINO\n" + "2. FELINO");
-                int s = read.nextInt();
+
+                System.out.println("Escoja entre estas especies\n" + "1. CANINO\n" + "2. FELINO");
+                int s1 = read.nextInt();
                 String pSpecie = "";
-                switch (s) {
+                switch (s1) {
                     case 1:
                         pSpecie = "CANINO";
                         break;
@@ -104,9 +160,11 @@ public class Manager {
                         pSpecie = "FELINO";
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
-                System.out.println("escoja el sexo \n" + "1. HEMBRA\n" + "2. MACHO");
+
+
+                System.out.println("Escoja el sexo \n" + "1. HEMBRA\n" + "2. MACHO");
                 int sex = read.nextInt();
                 String pSex = "";
                 switch (sex) {
@@ -117,9 +175,9 @@ public class Manager {
                         pSex = "MACHO";
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
-                System.out.println("escoja el tamaño \n" + "1. MINIATURA\n" + "2. PEQUEÑO\n" + "3. MEDIANO\n" + "4. GRANDE");
+                System.out.println("Escoja el tamaño \n" + "1. MINIATURA\n" + "2. PEQUEÑO\n" + "3. MEDIANO\n" + "4. GRANDE");
                 int size = read.nextInt();
                 String pSize = "";
                 switch (size) {
@@ -136,9 +194,9 @@ public class Manager {
                         pSize = "GRANDE";
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
-                System.out.println("el animal es peligroso? \n" + "1. NO\n" + "2. SI");
+                System.out.println("¿El animal es peligroso? \n" + "1. NO\n" + "2. SI");
                 int danger = read.nextInt();
                 String pDanger = "";
                 switch (danger) {
@@ -149,11 +207,11 @@ public class Manager {
                         pDanger = "SI";
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
                 message = findByMultipleFields(pSpecie, pSex, pSize, pDanger);
                 System.out.println(message);
-                System.out.println("\nquiere seguir en el programa?\n" + "1. Si\n" + "2. No");
+                System.out.println("\n¿Quiere seguir en el programa?\n" + "1. Si\n" + "2. No");
                 int exit4 = read.nextInt();
                 switch (exit4) {
                     case 1:
@@ -163,7 +221,7 @@ public class Manager {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("LA OPCION NO ES CORRECTA");
+                        System.out.println("La opción es incorrecta");
                 }
                 break;
 
@@ -172,6 +230,11 @@ public class Manager {
                 break;
         }
     }
+
+
+    /**
+     * This method assign the ID of the pets.
+     */
 
     private void assignID() {
         String message = "";
@@ -203,6 +266,9 @@ public class Manager {
         }
     }
 
+    /**
+     * This method upload the data of the pets.
+     */
 
     public void uploadData() {
 
@@ -255,6 +321,14 @@ public class Manager {
 
     }
 
+    /**
+     * This method find a pet by microchip.
+     *  <b>pre</b> The ArrayList must be created.<br>
+     * 	<b>post</b> The return must be changed.<br>
+     * @param pMicrochip is the String value.
+     * @return is the message with the information.
+     */
+
     private String findByMicrochip(String pMicrochip) {
         String message = "";
         try {
@@ -273,6 +347,15 @@ public class Manager {
         return message;
     }
 
+    /**
+     * The method count pets by species.
+     *  <b>pre</b> The ArrayList must be created.<br>
+     * 	<b>post</b> The return must be changed.<br>
+     * @param pSpecie is the String value.
+     * @return is the message with the count.
+     */
+
+
     private String countBySpecies(String pSpecie) {
         String message = "";
         int cont = 0;
@@ -290,6 +373,16 @@ public class Manager {
         return message;
     }
 
+    /**
+     * This method find pets by level of danger.
+     *  <b>pre</b> The ArrayList must be created.<br>
+     * 	<b>post</b> The return must be changed.<br>
+     * @param n is the int value.
+     * @param option is the String value.
+     * @param neighborhood is the String value.
+     * @return is the message with the danger pets information.
+     */
+
     public String findBypotentDangerousInNeighborhood(int n, String option, String neighborhood) {
         String message = "";
         int count = 0;
@@ -298,7 +391,7 @@ public class Manager {
                 if (listOfPet.get(i).getPotentDangerous() && listOfPet.get(i).getNeighborhood().equals(neighborhood)) {
                     count++;
                     if (count <= n) {
-                        message += "ID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
+                        message += "\nID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
                                 + "Gender: " + listOfPet.get(i).getSex() + "\n" + "Size: " + listOfPet.get(i).getSize() + "\n" + "Potentially dangerous: " + listOfPet.get(i).getPotentDangerous() + "\n" + "Neighborhood: " + listOfPet.get(i).getNeighborhood() + "\n";
                     }
                 }
@@ -308,7 +401,7 @@ public class Manager {
                 if (listOfPet.get(i).getPotentDangerous() && listOfPet.get(i).getNeighborhood().equals(neighborhood)) {
                     count++;
                     if (count <= n) {
-                        message += "ID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
+                        message += "\nID: " + listOfPet.get(i).getId() + "\n" + "Species: " + listOfPet.get(i).getSpecies() + "\n"
                                 + "Gender: " + listOfPet.get(i).getSex() + "\n" + "Size: " + listOfPet.get(i).getSize() + "\n" + "Potentially dangerous: " + listOfPet.get(i).getPotentDangerous() + "\n" + "Neighborhood: " + listOfPet.get(i).getNeighborhood() + "\n";
                     }
                 }
@@ -316,6 +409,17 @@ public class Manager {
         }
         return message;
     }
+
+    /**
+     * This method find a pet by multiple fields.
+     *  <b>pre</b> The ArrayList must be created.<br>
+     * 	<b>post</b> The return must be changed.<br>
+     * @param species is the String value.
+     * @param sex is the String value.
+     * @param size is the String value.
+     * @param potentDangerous is the String value.
+     * @return is the message with the information required.
+     */
 
     public String findByMultipleFields(String species, String sex, String size, String potentDangerous) {
         String message = "";
